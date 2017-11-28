@@ -2,7 +2,7 @@ organization := "me.lessis"
 
 name := "prints"
 
-version := "0.1.0"
+version := "0.1.2"
 
 description :=  "jwt interface for scala"
 
