@@ -1,6 +1,6 @@
 # Prints
 
-[![Build Status](https://travis-ci.org/softprops/prints.svg)](https://travis-ci.org/softprops/prints)
+[![Build Status](https://travis-ci.org/meetup/prints.svg?branch=master)](https://travis-ci.org/meetup/prints)
 
 a [jwt](https://tools.ietf.org/html/draft-ietf-oauth-json-web-token-32) finger printer
 
