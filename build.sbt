@@ -24,13 +24,13 @@ bintrayPackageLabels in ThisBuild := Seq("jwt")
 
 pomExtra :=
   <scm>
-    <url>git@github.com:softprops/{name.value}.git</url>
-    <connection>scm:git:git@github.com:softprops/{name.value}.git</connection>
+    <url>git@github.com:meetup/{name.value}.git</url>
+    <connection>scm:git:git@github.com:meetup/{name.value}.git</connection>
   </scm>
   <developers>
     <developer>
-      <id>softprops</id>
+      <id>meetup</id>
       <name>Doug Tangren</name>
-      <url>https://github.com/softprops</url>
+      <url>https://github.com/meetup</url>
     </developer>
   </developers>
