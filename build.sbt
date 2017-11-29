@@ -22,6 +22,8 @@ libraryDependencies ++= Seq(
 bintrayOrganization in ThisBuild := Some("meetup")
 bintrayPackageLabels in ThisBuild := Seq("jwt")
 
+licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
+
 pomExtra :=
   <scm>
     <url>git@github.com:meetup/{name.value}.git</url>
