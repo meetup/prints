@@ -1,33 +1,28 @@
+enablePlugins(CommonSettingsPlugin)
+enablePlugins(CoverallsWrapper)
+
+// Preserve the author's coding style
+includeFilter in scalariformFormat := NothingFilter
+
 organization := "me.lessis"
 
 name := "prints"
 
-version := "0.1.2"
-
 description :=  "jwt interface for scala"
 
-homepage := Some(url(s"https://github.com/softprops/${name.value}"))
-
-crossScalaVersions := Seq("2.10.5", "2.11.7")
-
-scalaVersion := crossScalaVersions.value.last
+homepage := Some(url(s"https://github.com/meetup/${name.value}"))
 
 resolvers += "softprops-maven" at "http://dl.bintray.com/content/softprops/maven"
 
 libraryDependencies ++= Seq(
   "me.lessis" %% "base64" % "0.2.0",
-  "org.json4s" %% "json4s-native" % "3.5.3",
-  "org.scalatest" %% "scalatest" % "2.2.1" % "test"
+  "org.json4s" %% "json4s-native" % "3.5.3"
 )
 
-licenses := Seq(
-  ("MIT", url(s"https://github.com/softprops/${name.value}/blob/${version.value}/LICENSE")))
+bintrayOrganization in ThisBuild := Some("meetup")
+bintrayPackageLabels in ThisBuild := Seq("jwt")
 
-seq(bintraySettings:_*)
-
-bintray.Keys.packageLabels in bintray.Keys.bintray := Seq("jwt")
-
-pomExtra := (
+pomExtra :=
   <scm>
     <url>git@github.com:softprops/{name.value}.git</url>
     <connection>scm:git:git@github.com:softprops/{name.value}.git</connection>
@@ -39,4 +34,3 @@ pomExtra := (
       <url>https://github.com/softprops</url>
     </developer>
   </developers>
-)

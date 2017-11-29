@@ -1,14 +1,59 @@
-sudo: false
+sudo: required
+language: bash
+
+# exclude tags.
+branches:
+  except:
+  - /^v\d+.\d+.\d+$/
+
+services:
+  - docker
+
+cache:
+  directories:
+  - "$HOME/.ivy2"
+  - "$HOME/.sbt"
+
+env:
+  global:
+    - CI_BUILD_NUMBER=$TRAVIS_BUILD_NUMBER
+    - CLOUDSDK_CORE_DISABLE_PROMPTS=1
+
 before_script:
  - "echo $JAVA_OPTS"
  - "export JAVA_OPTS='-Xmx512m -Xss1M -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M'"
-language: scala
-scala:
-  - 2.10.5
-  - 2.11.7
-jdk:
-  - openjdk6
-cache:
-  directories:
-    - $HOME/.ivy2
-    - $HOME/.sbt
+
+before_install:
+
+  # Install envtpl for easy templating.
+  - sudo pip install envtpl
+
+  - mkdir "$HOME/.bintray"
+  - envtpl < .credentials > "$HOME/.bintray/.credentials"
+
+  # Use SNAPSHOT for all other than master builds.
+  - export CI_BUILD_NUMBER=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then echo $CI_BUILD_NUMBER; else echo "${TRAVIS_BUILD_NUMBER}-SNAPSHOT"; fi)
+  - echo "CI_BUILD_NUMBER=${CI_BUILD_NUMBER}"
+
+script:
+  - >
+    if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
+      make publish;
+    else
+      make package;
+    fi
+
+after_success:
+  - >
+    if [ "${TRAVIS_PULL_REQUEST}" = "false" ] && [ "${TRAVIS_BRANCH}" = "master" ]; then
+      eval "$(ssh-agent)";
+      echo "$GITHUB_DEPLOY_KEY" > /tmp/github_deploy_key;
+      chmod 600 /tmp/github_deploy_key;
+      ssh-add /tmp/github_deploy_key;
+      git config --global user.email "builds@travis-ci.org";
+      git config --global user.name "Travis CI";
+      export GIT_TAG=v$(make version);
+      echo "GIT_TAG=$GIT_TAG";
+      git tag $GIT_TAG -f -a -m "Version $GIT_TAG built by Travis CI - https://travis-ci.org/$TRAVIS_REPO_SLUG/jobs/$TRAVIS_JOB_ID";
+      git push -q git@github.com:$TRAVIS_REPO_SLUG.git --tags;
+    fi

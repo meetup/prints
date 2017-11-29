@@ -1,6 +1,5 @@
 package prints
 
-import java.util.Arrays
 import scala.concurrent.duration._
 
 object JWT {
@@ -76,7 +75,7 @@ object JWT {
           if (!verified) Left(Err.SignatureInvalid)
           else if (!exp) Left(Err.Expired)
           else if (!nbf) Left(Err.TooEarly)
-          else Right(header, claims, sig)
+          else Right((header, claims, sig))
         }
     }
 
